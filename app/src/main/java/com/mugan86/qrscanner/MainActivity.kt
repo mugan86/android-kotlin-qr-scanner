@@ -1,16 +1,17 @@
 package com.mugan86.qrscanner
 
+import anartzmuxika.connectionchangereceiver.utils.DateTime
 import android.Manifest
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.support.v4.content.ContextCompat
-
+import com.mugan86.qrscanner.data.Constants
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -22,18 +23,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        openScanner.setOnClickListener({
+        openScanner.setOnClickListener {
             launchActivity(ScannerViewActivity::class.java)
-        })
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        val barcode = data.extras.getString("BarCode")
+        val barcode = data.extras.getString(Constants.BAR_CODE)
 
         if (barcode == "") {
-            Toast.makeText(this@MainActivity,"Bar code not found",Toast.LENGTH_LONG).show()
+            Toast.makeText(this@MainActivity,Constants.BAR_CODE_NOT_FOUND,Toast.LENGTH_LONG).show()
         } else {
             bar_code_id_txt?.text = barcode
+            scan_data_txt.text = DateTime.currentDataTime
         }
     }
 
@@ -56,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
                     // permission was granted, yay! do the
                     // calendar task you need to do.
-                    Toast.makeText(this, "Press again button to scan code", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, Constants.PRESS_AGAIN_TO_SCAN, Toast.LENGTH_LONG).show()
 
 
                 } else {

@@ -6,20 +6,21 @@ import android.os.Bundle
 import android.util.Log
 import com.google.zxing.Result
 import me.dm7.barcodescanner.zxing.ZXingScannerView
+import android.media.MediaPlayer
+import com.mugan86.qrscanner.data.Constants
 
 
 /**
- * Created by joydeep on 28/10/16.
+ * Created by
+ * @name Anartz
+ * @lastname Mugika
+ * @data 2018/06/15
  */
 class ScannerViewActivity : Activity(), ZXingScannerView.ResultHandler {
-
-
     private var mScannerView: ZXingScannerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // TODO Auto-generated method stub
         super.onCreate(savedInstanceState)
-        // setContentView(R.layout.redeem_it);
 
         mScannerView = ZXingScannerView(this)   // Programmatically initialize the scanner view
         setContentView(mScannerView)
@@ -32,63 +33,55 @@ class ScannerViewActivity : Activity(), ZXingScannerView.ResultHandler {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onResume() {
-        // TODO Auto-generated method stub
         super.onResume()
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     override fun onPause() {
-        // TODO Auto-generated method stub
         super.onPause()
-
-        try {
-            mScannerView!!.stopCamera() // Stop camera on pause
-        } catch (e: Exception) {
-            Log.e("Error", e.message)
-        }
-
-        val resultintent = Intent()
-        resultintent.putExtra("BarCode", "")
-        setResult(2, resultintent)
-        finish()
+        this.cleanResult()
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    override fun onBackPressed() {
+    override fun onBackPressed() { this.cleanResult() }
 
+    private fun cleanResult() {
         try {
             mScannerView!!.stopCamera() // Stop camera on pause
         } catch (e: Exception) {
-            Log.e("Error", e.message)
+            Log.e(Constants.ERROR, e.message)
         }
 
-        val resultintent = Intent()
-        resultintent.putExtra("BarCode", "")
-        setResult(2, resultintent)
+        val resultIntent = Intent()
+        resultIntent.putExtra(Constants.BAR_CODE, "")
+        setResult(2, resultIntent)
         finish()
-
     }
 
     override fun handleResult(rawResult: Result) {
         // Do something with the result here
 
-        Log.e("handler", rawResult.text) // Prints scan results
-        Log.e("handler", rawResult.barcodeFormat.toString()) // Prints the scan format (qrcode)
+        Log.e(Constants.HANDLER, rawResult.text) // Prints scan results
+        Log.e(Constants.HANDLER, rawResult.barcodeFormat.toString()) // Prints the scan format (qrcode)
 
         try {
             mScannerView!!.stopCamera()
 
-            val resultintent = Intent()
-            resultintent.putExtra("BarCode", rawResult.text)
-            setResult(2, resultintent)
+            // Add Sound to comfirm correct take sound
+            MediaPlayer.create(this, Constants.SCAN_OK_SOUND).start()
+            val resultIntent = Intent()
+
+            resultIntent.putExtra(Constants.BAR_CODE, rawResult.text)
+            setResult(2, resultIntent)
             finish()
 
-            println("************** Stop Camera**********")
+            println(Constants.STOP_CAMERA)
             // Stop camera on pause
         } catch (e: Exception) {
-            Log.e("Error", e.message)
+            Log.e(Constants.ERROR, e.message)
+            MediaPlayer.create(this, Constants.SCAN_ERROR_SOUND).start()
         }
 
     }
