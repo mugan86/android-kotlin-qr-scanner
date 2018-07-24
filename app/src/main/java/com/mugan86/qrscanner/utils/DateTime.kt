@@ -1,4 +1,4 @@
-package anartzmuxika.connectionchangereceiver.utils
+package com.mugan86.qrscanner.utils
 
 import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
