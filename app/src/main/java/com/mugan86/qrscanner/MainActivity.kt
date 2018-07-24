@@ -1,6 +1,6 @@
 package com.mugan86.qrscanner
 
-import anartzmuxika.connectionchangereceiver.utils.DateTime
+import com.mugan86.qrscanner.utils.DateTime
 import android.Manifest
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -11,8 +11,6 @@ import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.support.v4.content.ContextCompat
 import com.mugan86.qrscanner.data.Constants
-import java.util.*
-
 
 class MainActivity : AppCompatActivity() {
 
